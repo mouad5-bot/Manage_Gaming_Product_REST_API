@@ -16,9 +16,8 @@ return new class extends Migration
             $table->id();
             $table->string('title', 30)->nullable(false);
             $table->string('description')->nullable(false);
-            $table->string('seller')->nullable(false);
-            $table->string('category')->nullable(false);
-            $table->date('published_at')->nullable(false);
+            $table->foreignId('user_id')->constrained()->onDelete('cascade')->nullable(false);
+            $table->foreignId('category_id')->constrained()->onDelete('cascade')->nullable(false);
             $table->timestamps();
         });
     }

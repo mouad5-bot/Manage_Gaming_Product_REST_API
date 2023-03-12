@@ -15,72 +15,87 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $Categories = Category::orderBy('id')->get();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return response()->json([
+            'status' => 'success',
+            'Categories' => $Categories
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreCategoryRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreCategoryRequest $request)
     {
-        //
+        $Category = Category::create($request->all());
+
+        return response()->json([
+            'status' => true,
+            'message' => "Category Created successfully!",
+            'Category' => $Category
+        ], 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Category  $category
+     * @param  \App\Models\Category  $Category
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show(Category $Category)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Category $category)
-    {
-        //
+        $Category->find($Category->id);
+        if (!$Category) {
+            return response()->json(['message' => 'Category not found'], 404);
+        }
+        return response()->json($Category, 200);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateCategoryRequest  $request
-     * @param  \App\Models\Category  $category
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Category  $Category
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCategoryRequest $request, Category $category)
+    public function update(StoreCategoryRequest $request, Category $Category)
     {
-        //
+        $Category->update($request->all());
+
+        if (!$Category) {
+            return response()->json(['message' => 'Category not found'], 404);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => "Category Updated successfully!",
+            'Category' => $Category
+        ], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Category  $category
+     * @param  \App\Models\Category  $Category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy(Category $Category)
     {
-        //
+        $Category->delete();
+
+        if (!$Category) {
+            return response()->json([
+                'message' => 'Category not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Category deleted successfully'
+        ], 200);
     }
 }

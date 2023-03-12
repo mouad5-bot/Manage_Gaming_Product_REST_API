@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 
 
 Route::controller(AuthController::class)->group(function () {
@@ -14,3 +15,5 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::apiResource('products', ProductController::class);
+Route::apiResource('category', CategoryController::class);
+Route::get('/products/filter', [ProductController::class, 'filter']);

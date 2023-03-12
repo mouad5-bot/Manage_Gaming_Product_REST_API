@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -37,7 +38,8 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        $Product = Product::create($request->all());
+        $user = Auth::user();
+        $Product = $user->products()->create($request->all());
 
         return response()->json([
             'status' => true,
@@ -68,8 +70,16 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $Product
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreProductRequest $request, Product $Product)
+    public function update(UpdateProductRequest $request, Product $Product)
     {
+        $user = Auth::user();
+
+        if(!$user->can('edit all products') && $Product->user_id != $user->id){
+            return response()->json([
+                'status' => false,
+                'message' => "You don't have the permission for edit this Product!"
+            ], 200);
+        }
         $Product->update($request->all());
 
         if (!$Product) {
@@ -91,13 +101,22 @@ class ProductController extends Controller
      */
     public function destroy(Product $Product)
     {
-        $Product->delete();
+        $user = Auth::user();
+
+        if(!$user->can('delete all products') && $Product->user_id != $user->id){
+            return response()->json([
+                'status' => false,
+                'message' => "You don't have the permission for delete this Product!"
+            ], 200);
+        }
 
         if (!$Product) {
             return response()->json([
                 'message' => 'Product not found'
             ], 404);
         }
+
+        $Product->delete();
 
         return response()->json([
             'status' => true,
