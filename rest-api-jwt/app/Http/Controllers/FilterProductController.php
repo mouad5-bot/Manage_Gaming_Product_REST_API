@@ -7,6 +7,11 @@ use App\Models\Product;
 
 class FilterProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+    
     public function filter(Request $request){
         $_query = Product::with(['user','category']);
 

@@ -59,9 +59,9 @@ class RolesAndPermissionsSeeder extends Seeder
             ->givePermissionTo([
                 'read products',
                 'edit my profil',
-                'delete my profil',
-                'read user',
-                'create user',
+                'delete my profil', 
+                'read user',//view my profile
+                'create user', //create a new account
             ]);
 
         $role = Role::create(['name' => 'admin']);
