@@ -36,13 +36,6 @@ class UserController extends Controller
         ], Response::HTTP_OK);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
     public function updateNameEmail(UpdateNameEmailUserRequest $request, User $user)
     {
 
@@ -86,8 +79,8 @@ class UserController extends Controller
     }
 
 
-    public function changeRole(ChangeRoleRequest $request,User $user){
-
+    public function changeRole(ChangeRoleRequest $request,User $user)
+    {
         $user->syncRoles($request->validated());
 
         return response()->json([
@@ -96,12 +89,8 @@ class UserController extends Controller
             'data' => new UserResource($user)
         ], Response::HTTP_OK);
     }
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
+    
+
     public function destroy(User $user)
     {
         $userauth = Auth::user();

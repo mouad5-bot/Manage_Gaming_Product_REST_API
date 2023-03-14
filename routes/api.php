@@ -13,6 +13,8 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
+    Route::post('forgotPassword', 'forgotPassword');
+    Route::post('resetPassword', 'resetPassword');
 });
 
 Route::group(['controller' => ProductController::class, 'prefix' => 'products'], function () {
