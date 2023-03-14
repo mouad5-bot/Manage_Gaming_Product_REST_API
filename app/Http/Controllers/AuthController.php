@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use App\Http\Requests\RegisterRequest;
 
 
 class AuthController extends Controller
@@ -43,30 +44,30 @@ class AuthController extends Controller
         ]);
     }
 
-    public function register(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
-        ]);
+    public function register(RegisterRequest $request)
+    {        
+        $role = $request->Role;
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+        
+        $user->assignRole($role);
 
         $token = Auth::login($user);
+        
         return response()->json([
             'status' => 'success',
             'message' => 'User created successfully',
-            'user' => $user,
+            'user' => $user->only(['name', 'email']), // Only return non-sensitive information,
             'authorisation' => [
                 'token' => $token,
                 'type' => 'bearer',
             ]
         ]);
+
     }
 
     public function logout()
@@ -117,7 +118,7 @@ class AuthController extends Controller
                 $user->forceFill([
                     'password' => Hash::make($password)
                 ]);
-                
+
                 $user->save();
             }
         );
