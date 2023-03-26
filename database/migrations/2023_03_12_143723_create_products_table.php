@@ -14,8 +14,10 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 30)->nullable(false);
+            $table->string('title')->nullable(false);
             $table->string('description')->nullable(false);
+            $table->float('price')->nullable(false);
+            $table->string('content')->nullable(false);
             $table->foreignId('user_id')->constrained()->onDelete('cascade')->nullable(false);
             $table->foreignId('category_id')->constrained()->onDelete('cascade')->nullable(false);
             $table->timestamps();

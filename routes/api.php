@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
@@ -15,6 +16,15 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('refresh', 'refresh');
     Route::post('forgotPassword', 'forgotPassword');
     Route::post('resetPassword', 'resetPassword');
+});
+
+Route::group(['controller' => UserController::class, 'prefix' => 'users'], function () {
+    Route::get('', 'index')->middleware(['permission:read all profiles | read my profile']);
+    Route::get('/{user}', 'show')->middleware(['permission:read all profiles | read my profile']);
+    Route::post('/{user}', 'updatePassword')->middleware(['permission:edit profil | edit my profil']);
+    Route::put('/{user}', 'updateNameEmail')->middleware(['permission:edit profil | edit my profil']);
+    // Route::put('/{user}', )->middleware(['permission:edit profil | edit my profil']);
+    Route::delete('/{user}', 'destroy')->middleware(['permission:delete all profils | delete my profil']);
 });
 
 Route::group(['controller' => ProductController::class, 'prefix' => 'products'], function () {

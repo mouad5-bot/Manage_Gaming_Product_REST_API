@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class ProductController extends Controller
 {
@@ -22,6 +23,8 @@ class ProductController extends Controller
      */
     public function index()
     {
+        $user = JWTAuth::user();
+        // dd($user->hasPermissionTo('read products'));
         $Products = Product::orderBy('id')->get();
 
         return response()->json([

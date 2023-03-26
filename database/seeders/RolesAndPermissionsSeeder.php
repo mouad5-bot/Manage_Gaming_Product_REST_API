@@ -34,34 +34,30 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'edit my profil']);
         Permission::create(['name' => 'delete all profils']);
         Permission::create(['name' => 'delete my profil']);
-        Permission::create(['name' => 'read user']);
-        Permission::create(['name' => 'create user']);
+        Permission::create(['name' => 'read all profiles']);
+        Permission::create(['name' => 'read my profile']);
 
         
 
         // create roles and assign created permissions
 
-        // this can be done as separate statements
         $role = Role::create(['name' => 'seller']);
         $role->givePermissionTo([
                 'edit my product',
                 'delete my product',
                 'create product',
                 'read products',
-                'edit my profil',
+                'edit my profil',  
                 'delete my profil',
-                'read user',
-                'create user',
+                'read my profile',
     ]);
 
-        // or may be done by chaining
         $role = Role::create(['name' => 'user'])
             ->givePermissionTo([
                 'read products',
                 'edit my profil',
                 'delete my profil', 
-                'read user',//view my profile
-                'create user', //create a new account
+                'read my profile',
             ]);
 
         $role = Role::create(['name' => 'admin']);
