@@ -13,7 +13,7 @@ class FilterProductController extends Controller
     }
     
     public function filter(Request $request){
-        $_query = Product::with(['user','category']);
+        $_query = Product::with(['category']);
 
             $data = $request->category;
 

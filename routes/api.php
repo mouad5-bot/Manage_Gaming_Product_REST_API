@@ -7,6 +7,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FilterProductController;
+use App\Http\Controllers\ResetPasswordController;
+
 
 
 Route::controller(AuthController::class)->group(function () {
@@ -19,12 +21,20 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::group(['controller' => UserController::class, 'prefix' => 'users'], function () {
-    Route::get('', 'index')->middleware(['permission:read all profiles | read my profile']);
-    Route::get('/{user}', 'show')->middleware(['permission:read all profiles | read my profile']);
-    Route::post('/{user}', 'updatePassword')->middleware(['permission:edit profil | edit my profil']);
-    Route::put('/{user}', 'updateNameEmail')->middleware(['permission:edit profil | edit my profil']);
-    // Route::put('/{user}', )->middleware(['permission:edit profil | edit my profil']);
+    Route::get('', 'index');
+    Route::get('/{user}', 'show');
+    Route::put('/{user}', 'updateNameEmail'); 
     Route::delete('/{user}', 'destroy')->middleware(['permission:delete all profils | delete my profil']);
+});
+
+Route::group(['controller' => ResetPasswordController::class], function (){
+    Route::post('forgot-password', 'sendResetLinkEmail')->middleware('guest')->name('password.email');
+    Route::post('reset-password', 'resetPassword')->middleware('guest')->name('password.update');
+    Route::get('reset-password/{token}', 
+    function (string $token)
+    {
+         return $token;
+    })->middleware('guest')->name('password.reset');
 });
 
 Route::group(['controller' => ProductController::class, 'prefix' => 'products'], function () {
